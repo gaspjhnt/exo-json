@@ -4,12 +4,10 @@ import { HttpClient } from '@angular/common/http';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'] 
+  styleUrls: ['./app.component.css']
 })
-
-
 export class AppComponent implements OnInit {
-  users: [] = [];
+  users: any[] = [];
 
   constructor(private http: HttpClient) {}
 
@@ -21,5 +19,18 @@ export class AppComponent implements OnInit {
         lastName: user.lastName
       }));
     });
+  }
+
+  downloadFile() {
+    const fichier = new Blob([JSON.stringify(this.users)], { type: 'application/json' });
+    const lien = document.createElement('a');
+
+    lien.href = URL.createObjectURL(fichier);
+    lien.download = 'users.json';
+    
+    document.body.appendChild(lien);
+    lien.click();
+    document.body.removeChild(lien);
+    URL.revokeObjectURL(URL.createObjectURL(fichier));
   }
 }
